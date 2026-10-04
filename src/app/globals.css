@@ -1,26 +1,94 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #0b0b0c;
+  --color-coal: #121214;
+  --color-iron: #1a1a1d;
+  --color-steel: #26262b;
+  --color-bone: #f3efe8;
+  --color-ash: #a3a1a8;
+  --color-blood: #e3173e;
+  --color-blood-dark: #b80f2f;
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-barlow);
+
+  --animate-marquee: marquee 40s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-bone);
+}
+
+::selection {
+  background: var(--color-blood);
+  color: white;
+}
+
+@utility btn {
+  @apply inline-flex shrink-0 items-center justify-center gap-2 px-6 whitespace-nowrap py-3.5 text-sm font-semibold tracking-wide uppercase transition duration-200;
+}
+@utility btn-primary {
+  @apply btn bg-blood text-white hover:bg-blood-dark;
+}
+@utility btn-ghost {
+  @apply btn border border-white/25 text-white hover:border-white hover:bg-white hover:text-ink;
+}
+@utility eyebrow {
+  @apply font-display text-sm font-semibold tracking-[0.3em] text-blood uppercase;
+}
+@utility heading {
+  @apply font-display text-4xl leading-[0.95] font-extrabold tracking-tight uppercase sm:text-5xl lg:text-6xl;
+}
+@utility container-x {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Scroll reveal (toggled by <Reveal>) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Subtle film grain over dark sections */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-marquee {
+    animation: none;
+  }
 }
