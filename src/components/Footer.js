@@ -1,11 +1,14 @@
 import Link from "next/link";
 import Logo from "./Logo";
+import Reveal from "./Reveal";
+import SplitText from "./SplitText";
 import { artists, nav, site } from "@/data/site";
 import { FacebookIcon, InstagramIcon, MailIcon, PhoneIcon, PinIcon } from "./Icons";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-white/5 bg-coal">
+    <footer className="relative overflow-hidden border-t border-white/5 bg-coal">
+      <div aria-hidden className="pointer-events-none absolute -bottom-40 left-1/2 size-[40rem] -translate-x-1/2 rounded-full bg-blood/10 blur-3xl" />
       <div className="container-x grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4">
         <div className="space-y-5">
           <Logo />
@@ -19,7 +22,8 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="grid size-10 place-items-center border border-white/10 transition hover:border-blood hover:text-blood"
+              data-magnetic
+              className="grid size-10 place-items-center border border-white/10 transition duration-300 hover:border-blood hover:bg-blood hover:text-white"
             >
               <InstagramIcon />
             </a>
@@ -28,7 +32,8 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Facebook"
-              className="grid size-10 place-items-center border border-white/10 transition hover:border-blood hover:text-blood"
+              data-magnetic
+              className="grid size-10 place-items-center border border-white/10 transition duration-300 hover:border-blood hover:bg-blood hover:text-white"
             >
               <FacebookIcon />
             </a>
@@ -44,7 +49,7 @@ export default function Footer() {
               .filter((i) => i.key !== "artists")
               .map((i) => (
                 <li key={i.href}>
-                  <Link href={i.href} className="transition hover:text-white">
+                  <Link href={i.href} className="inline-block transition duration-300 hover:translate-x-1.5 hover:text-white">
                     {i.label}
                   </Link>
                 </li>
@@ -103,7 +108,17 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/5">
+      <Reveal variant="none" className="container-x select-none" aria-hidden>
+        <p className="group flex justify-between font-display text-[15vw] leading-[0.8] font-extrabold tracking-tight uppercase xl:text-[13.5rem]">
+          <span className="text-outline text-white/15 transition duration-700 group-hover:text-blood">
+            <SplitText>Viking</SplitText>
+          </span>
+          <span className="text-outline text-white/15 transition duration-700 group-hover:text-blood">
+            <SplitText start={1}>Armor</SplitText>
+          </span>
+        </p>
+      </Reveal>
+      <div className="relative border-t border-white/5">
         <div className="container-x flex flex-col gap-2 py-6 text-xs text-white/40 sm:flex-row sm:justify-between">
           <p>© {new Date().getFullYear()} Viking Armor Tattoo. All rights reserved.</p>
           <p>18+ only · Tattoos only, no piercing · Veteran owned</p>

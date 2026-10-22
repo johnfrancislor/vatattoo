@@ -1,6 +1,7 @@
 import Image from "next/image";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import SplitText from "@/components/SplitText";
 import { CheckIcon, MailIcon } from "@/components/Icons";
 import { site } from "@/data/site";
 
@@ -28,7 +29,7 @@ export default function GiftShopPage() {
       >
         <div className="flex flex-wrap justify-center gap-2">
           {goods.map((g) => (
-            <span key={g} className="border border-white/15 bg-white/5 px-4 py-2 text-sm tracking-wider uppercase">
+            <span key={g} className="border border-white/15 bg-white/5 px-4 py-2 text-sm tracking-wider uppercase transition duration-300 hover:-translate-y-0.5 hover:border-blood hover:bg-blood/15">
               {g}
             </span>
           ))}
@@ -37,30 +38,41 @@ export default function GiftShopPage() {
 
       <section className="bg-coal py-20 lg:py-28">
         <div className="container-x grid items-center gap-14 lg:grid-cols-2">
-          <Reveal className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             {[
               ["/images/pet-framed.webp", 262, 319],
               ["/images/pet-2.webp", 273, 341],
               ["/images/pet-1.webp", 330, 255],
               ["/images/pet-3.webp", 341, 254],
             ].map(([src, w, h], i) => (
-              <div key={src} className={`bg-white p-3 ${i % 2 ? "mt-8" : ""}`}>
-                <Image src={src} alt="Single-line pet portrait example" width={w} height={h} className="aspect-square w-full object-contain" />
+              <div key={src} data-parallax={i % 2 ? 30 : -15} className={i % 2 ? "mt-8" : ""}>
+                <Reveal variant="scale" delay={i * 120}>
+                  <div
+                    data-tilt="10"
+                    className={`sheen bg-white p-3 shadow-2xl shadow-black/50 transition-[rotate] duration-700 ease-out-expo hover:rotate-0 ${
+                      ["-rotate-3", "rotate-2", "rotate-2", "-rotate-2"][i]
+                    }`}
+                  >
+                    <Image src={src} alt="Single-line pet portrait example" width={w} height={h} className="aspect-square w-full object-contain" />
+                  </div>
+                </Reveal>
               </div>
             ))}
-          </Reveal>
-          <Reveal delay={100}>
+          </div>
+          <Reveal variant="none" delay={100}>
             <p className="eyebrow">New</p>
-            <h2 className="heading mt-2">Custom pet portraits</h2>
-            <p className="mt-5 leading-relaxed text-ash">
+            <h2 className="heading mt-2">
+              <SplitText>Custom pet portraits</SplitText>
+            </h2>
+            <p className="reveal-fade mt-5 leading-relaxed text-ash">
               Single-line drawings of your pets on 8½&quot; × 11&quot; premium matte paper. Up to 3
               pets per sheet, with names in cursive or printed lettering.
             </p>
             <div className="mt-8 border border-white/10">
               {prices.map(([label, price]) => (
-                <div key={label} className="flex items-center justify-between border-b border-white/10 px-5 py-4 last:border-0">
-                  <span>{label}</span>
-                  <span className="font-display text-2xl font-bold text-blood">{price}</span>
+                <div key={label} className="group flex items-center justify-between border-b border-white/10 px-5 py-4 transition-colors duration-300 last:border-0 hover:bg-blood/10">
+                  <span className="transition duration-500 ease-out-expo group-hover:translate-x-1.5">{label}</span>
+                  <span className="font-display text-2xl font-bold text-blood transition duration-500 ease-out-expo group-hover:scale-110">{price}</span>
                 </div>
               ))}
             </div>
@@ -77,6 +89,7 @@ export default function GiftShopPage() {
             </ul>
             <a
               href={`mailto:${site.giftShopEmail}?subject=${encodeURIComponent("Pet portrait request")}`}
+              data-magnetic
               className="btn-primary mt-8"
             >
               <MailIcon className="size-4" /> Order a portrait

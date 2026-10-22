@@ -1,6 +1,7 @@
 import { Barlow_Condensed, Inter } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import MotionRoot from "@/components/motion/MotionRoot";
 import "./globals.css";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -25,8 +26,10 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${barlow.variable} antialiased`}>
       <body className="flex min-h-screen flex-col font-sans">
         <Header />
-        <main className="flex-1">{children}</main>
+        {/* overflow-x-clip: entrance offsets (slide-ins, clip zooms) must never cause sideways scroll */}
+        <main className="flex-1 overflow-x-clip">{children}</main>
         <Footer />
+        <MotionRoot />
       </body>
     </html>
   );

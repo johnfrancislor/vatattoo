@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import { ChevronIcon, CloseIcon } from "./Icons";
+import Reveal from "./Reveal";
 
 /**
  * Masonry gallery with optional artist filter and a keyboard-friendly lightbox.
@@ -30,10 +31,10 @@ export default function Gallery({ items, filters, initialCount = 24 }) {
       if (e.key === "ArrowRight") step(1);
       if (e.key === "ArrowLeft") step(-1);
     };
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
   }, [active, close, step]);
@@ -52,7 +53,7 @@ export default function Gallery({ items, filters, initialCount = 24 }) {
                 setFilter(f.value);
                 setLimit(initialCount);
               }}
-              className={`border px-5 py-2.5 text-sm font-semibold tracking-wide uppercase transition ${
+              className={`border px-5 py-2.5 text-sm font-semibold tracking-wide uppercase transition duration-300 ${
                 filter === f.value
                   ? "border-blood bg-blood text-white"
                   : "border-white/15 text-white/70 hover:border-white/40 hover:text-white"
@@ -66,27 +67,35 @@ export default function Gallery({ items, filters, initialCount = 24 }) {
 
       <div className="columns-2 gap-3 md:columns-3 md:gap-4 xl:columns-4">
         {visible.map((item, i) => (
-          <button
-            key={item.src}
+          <Reveal
+            as="button"
+            variant="clip"
+            key={`${filter}-${item.src}`}
+            delay={(i % 4) * 90}
             type="button"
             onClick={() => setActive(i)}
-            className="group relative mb-3 block w-full overflow-hidden bg-iron md:mb-4"
+            data-cursor="View"
+            className="group relative mb-3 block w-full overflow-hidden bg-iron break-inside-avoid md:mb-4"
             aria-label={`View larger: ${item.alt}`}
           >
-            <Image
-              src={item.src}
-              alt={item.alt}
-              width={item.width}
-              height={item.height}
-              sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
-              className="h-auto w-full transition duration-500 group-hover:scale-105"
-            />
-            <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 via-transparent p-4 opacity-0 transition group-hover:opacity-100">
-              <span className="font-display text-sm font-semibold tracking-widest uppercase">
+            <span className="block overflow-hidden">
+              <Image
+                src={item.src}
+                alt={item.alt}
+                width={item.width}
+                height={item.height}
+                sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
+                className="h-auto w-full transition duration-[1.2s] ease-out-expo group-hover:scale-110 group-hover:-rotate-1"
+              />
+            </span>
+            <span className="absolute inset-0 flex items-end bg-gradient-to-t from-black/85 via-black/10 to-transparent p-4 opacity-0 transition duration-500 group-hover:opacity-100">
+              <span className="flex translate-y-3 items-center gap-2 font-display text-sm font-semibold tracking-widest uppercase transition duration-500 ease-out-expo group-hover:translate-y-0">
+                <span className="h-px w-6 bg-blood" />
                 {item.artistName}
               </span>
             </span>
-          </button>
+            <span className="pointer-events-none absolute inset-0 border border-blood/0 transition duration-500 group-hover:border-blood/60" />
+          </Reveal>
         ))}
       </div>
 
@@ -100,18 +109,20 @@ export default function Gallery({ items, filters, initialCount = 24 }) {
 
       {current && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 backdrop-blur"
+          data-lenis-prevent
+          className="fixed inset-0 z-[100] flex animate-fade-in items-center justify-center bg-black/95 p-4 backdrop-blur"
           role="dialog"
           aria-modal="true"
           aria-label="Tattoo image viewer"
           onClick={close}
         >
           <Image
+            key={current.src}
             src={current.src}
             alt={current.alt}
             width={current.width}
             height={current.height}
-            className="max-h-[85vh] w-auto max-w-full object-contain"
+            className="max-h-[85vh] w-auto max-w-full animate-zoom-in object-contain shadow-2xl shadow-black"
             onClick={(e) => e.stopPropagation()}
           />
           <p className="absolute bottom-6 left-1/2 -translate-x-1/2 text-sm text-white/60">

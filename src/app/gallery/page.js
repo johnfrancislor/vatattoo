@@ -1,6 +1,8 @@
 import Link from "next/link";
 import Gallery from "@/components/Gallery";
 import PageHero from "@/components/PageHero";
+import Reveal from "@/components/Reveal";
+import SplitText from "@/components/SplitText";
 import { artists, galleryItems } from "@/data/site";
 
 export const metadata = {
@@ -23,15 +25,18 @@ export default function GalleryPage() {
           items={items}
           filters={artists.map((a) => ({ value: a.slug, label: a.first }))}
         />
-        <div className="mt-16 border border-white/10 bg-coal p-10 text-center">
-          <h2 className="font-display text-3xl font-extrabold uppercase sm:text-4xl">Like what you see?</h2>
-          <p className="mx-auto mt-3 max-w-lg text-ash">
+        <Reveal variant="none" className="relative mt-16 overflow-hidden border border-white/10 bg-coal p-10 text-center">
+          <div aria-hidden className="absolute -top-24 left-1/2 -z-0 size-80 -translate-x-1/2 rounded-full bg-blood/20 blur-3xl" />
+          <h2 className="relative font-display text-3xl font-extrabold uppercase sm:text-4xl">
+            <SplitText>Like what you see?</SplitText>
+          </h2>
+          <p className="relative mx-auto mt-3 max-w-lg text-ash">
             Send your idea to the artist whose style fits you best and we&apos;ll get you on the schedule.
           </p>
-          <Link href="/booking/" className="btn-primary mt-7">
+          <Link href="/booking/" data-magnetic className="btn-primary mt-7">
             Start your tattoo
           </Link>
-        </div>
+        </Reveal>
       </section>
     </>
   );

@@ -2,6 +2,7 @@ import Link from "next/link";
 import BookingForm from "@/components/BookingForm";
 import PageHero from "@/components/PageHero";
 import Reveal from "@/components/Reveal";
+import SplitText from "@/components/SplitText";
 import { ArrowIcon, CheckIcon, GiftIcon, PhoneIcon } from "@/components/Icons";
 import { site } from "@/data/site";
 
@@ -27,28 +28,28 @@ export default function BookingPage() {
         intro="Email your artist with your idea and references, put down a deposit, and you're on the books. Walk-ins are always welcome too."
         image="/images/work/brandon-69.webp"
       >
-        <a href="#request" className="btn-primary">
+        <a href="#request" data-magnetic className="btn-primary">
           Request an appointment
         </a>
-        <a href="#gift-cards" className="btn-ghost">
+        <a href="#gift-cards" data-magnetic className="btn-ghost">
           Gift cards
         </a>
       </PageHero>
 
       <section className="container-x grid gap-6 pb-20 lg:grid-cols-3">
-        <Reveal className="border border-white/10 bg-coal p-8 lg:col-span-2">
+        <Reveal variant="left" className="spotlight-static border border-white/10 bg-coal p-8 lg:col-span-2">
           <p className="eyebrow">Deposits</p>
           <h2 className="mt-2 font-display text-4xl font-extrabold uppercase">$100 to book</h2>
           <ul className="mt-6 space-y-3">
-            {depositPoints.map((p) => (
-              <li key={p} className="flex gap-3 text-white/80">
+            {depositPoints.map((p, i) => (
+              <li key={p} style={{ "--d": `${200 + i * 90}ms` }} className="reveal-fade flex gap-3 text-white/80">
                 <CheckIcon className="mt-0.5 size-5 shrink-0 text-blood" />
                 {p}
               </li>
             ))}
           </ul>
         </Reveal>
-        <Reveal delay={100} className="border border-blood/40 bg-blood/10 p-8">
+        <Reveal variant="right" delay={100} className="sheen border border-blood/40 bg-blood/10 p-8">
           <p className="eyebrow">Drawing fee</p>
           <h2 className="mt-2 font-display text-3xl font-extrabold uppercase">How your deposit works</h2>
           <p className="mt-4 text-white/80">
@@ -63,9 +64,11 @@ export default function BookingPage() {
 
       <section id="request" className="scroll-mt-24 bg-coal py-20 lg:py-28">
         <div className="container-x grid gap-14 lg:grid-cols-[1fr_1.6fr]">
-          <Reveal>
+          <Reveal variant="none">
             <p className="eyebrow">Request</p>
-            <h2 className="heading mt-2">Tell us your idea</h2>
+            <h2 className="heading mt-2">
+              <SplitText>Tell us your idea</SplitText>
+            </h2>
             <p className="mt-5 leading-relaxed text-ash">
               Fill this out and we&apos;ll open a ready-to-send email to your artist. They&apos;ll reply
               within a few days or weeks depending on their schedule.
@@ -85,7 +88,7 @@ export default function BookingPage() {
               . 18+ with valid photo ID.
             </p>
           </Reveal>
-          <Reveal delay={100} className="border border-white/10 bg-iron p-6 sm:p-10">
+          <Reveal variant="scale" delay={150} className="border border-white/10 bg-iron p-6 sm:p-10">
             <BookingForm />
           </Reveal>
         </div>
@@ -95,17 +98,24 @@ export default function BookingPage() {
         <Reveal className="relative isolate grid items-center gap-10 overflow-hidden border border-white/10 bg-gradient-to-br from-iron to-ink p-8 sm:p-14 lg:grid-cols-2">
           <div>
             <p className="eyebrow">Gift cards</p>
-            <h2 className="heading mt-2">Any amount. Never expires.</h2>
+            <h2 className="heading mt-2">
+              <SplitText>Any amount. Never expires.</SplitText>
+            </h2>
             <p className="mt-5 leading-relaxed text-ash">
               Buy a gift card online — make sure to include your mailing address — or stop by the shop
               and purchase one in person.
             </p>
-            <a href={site.giftCardUrl} target="_blank" rel="noopener noreferrer" className="btn-primary mt-8">
+            <a href={site.giftCardUrl} target="_blank" rel="noopener noreferrer" data-magnetic className="btn-primary mt-8">
               Buy gift card <ArrowIcon className="size-4" />
             </a>
           </div>
-          <div className="relative mx-auto w-full max-w-sm">
-            <div className="aspect-[1.6] rotate-[-4deg] bg-gradient-to-br from-blood to-blood-dark p-6 shadow-2xl shadow-blood/20">
+          <div data-parallax="-30" className="relative mx-auto w-full max-w-sm">
+            <div className="animate-float">
+            <div
+              data-tilt="16"
+              data-cursor="Gift"
+              className="spotlight sheen aspect-[1.6] rotate-[-4deg] bg-gradient-to-br from-blood to-blood-dark p-6 shadow-2xl shadow-blood/30 transition-[rotate] duration-700 ease-out-expo hover:rotate-0"
+            >
               <div className="flex h-full flex-col justify-between">
                 <div className="flex items-start justify-between">
                   <span className="font-display text-xl leading-none font-extrabold uppercase">
@@ -119,6 +129,7 @@ export default function BookingPage() {
                   <span className="font-display text-4xl font-extrabold">$ ANY</span>
                 </div>
               </div>
+            </div>
             </div>
           </div>
           <ul className="space-y-2 text-sm text-ash lg:col-span-2">
